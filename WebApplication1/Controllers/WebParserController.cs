@@ -33,7 +33,7 @@ namespace WebApplication1.Controllers
 
         private async Task CheckForUpdates(string url)
         {
-            List<dynamic> adverts = new List<dynamic>();
+            List<Advert> adverts = new List<Advert>();
             await GetPageContent(url, adverts);
 
             using (var db = new AdvertContext())
@@ -51,7 +51,7 @@ namespace WebApplication1.Controllers
 
         }
 
-        private async Task<List<dynamic>> GetPageContent(string url, List<dynamic> results)
+        private async Task<List<Advert>> GetPageContent(string url, List<Advert> results)
         {
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
@@ -93,13 +93,14 @@ namespace WebApplication1.Controllers
             return results;
         }
 
+        //TODO:Перенести в отдельный класс
         /// <summary>
         /// Определяет текущуюю страницу из параметра внутри DocumentElement.BaseUrl.Query
         /// Получает ссылку на следующую страницу из пагинатора
         /// </summary>
         /// <param name="document"></param>
         /// <returns>Возвращает ссылку на следующую страницу. String.Empty если страница последняя или единственная.</returns>
-        public string GetNextPageUrl(AngleSharp.Dom.IDocument document)
+        private string GetNextPageUrl(AngleSharp.Dom.IDocument document)
         {
             string nextPageUrl = "";
 
