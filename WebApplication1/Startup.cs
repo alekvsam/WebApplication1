@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication1.Models;
 
 namespace WebApplication1
 {
@@ -26,7 +28,10 @@ namespace WebApplication1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
+            services.AddEntityFrameworkNpgsql();
+            services.AddDbContext<AdvertContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("DatabaseConnection")));
+            services.AddMvc();
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
         }

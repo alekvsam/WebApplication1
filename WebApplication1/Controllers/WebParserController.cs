@@ -32,8 +32,21 @@ namespace WebApplication1.Controllers
 
         private async void CheckForUpdates(string url)
         {
-            List<dynamic> ads = new List<dynamic>();
-            await GetPageContent(url, ads);
+            List<dynamic> adverts = new List<dynamic>();
+            await GetPageContent(url, adverts);
+
+            using (var db = new AdvertContext())
+            {
+                foreach (Advert advert in adverts)
+                {
+                    // We check if the advert exists in the database
+                    var existingadvert = db.Adverts.SingleOrDefault(row => row.Url == advert.Url);
+                    if (existingadvert != null) continue; 
+
+                    db.Adverts.Add(advert);
+                    await db.SaveChangesAsync();
+                }
+            }
 
         }
 
@@ -66,6 +79,7 @@ namespace WebApplication1.Controllers
                 results.Add(advert);
             }
 
+            //TODO:Расконкурентить получение данных постранично
             var nextPageUrl = GetNextPageUrl(document);
             if (!String.IsNullOrEmpty(nextPageUrl))
             {
