@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp;
 using AngleSharp.Html.Parser;
+using WebApplication1.Data;
 using WebApplication1.Models;
 using System.Web;
 
@@ -30,7 +31,7 @@ namespace WebApplication1.Controllers
             return "Success";
         }
 
-        private async void CheckForUpdates(string url)
+        private async Task CheckForUpdates(string url)
         {
             List<dynamic> adverts = new List<dynamic>();
             await GetPageContent(url, adverts);

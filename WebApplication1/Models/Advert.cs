@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Models
@@ -11,21 +10,5 @@ namespace WebApplication1.Models
 
         public string Url { get; set; }
         public float Price { get; set; }
-    }
-
-    public class AdvertContext : DbContext
-    {
-        public DbSet<Advert> Adverts { get; set; }
-
-        public AdvertContext()
-        {
-        }
-
-        public AdvertContext(DbContextOptions<AdvertContext> options) 
-            : base(options)
-        {
-        }           
-
-
     }
 }
