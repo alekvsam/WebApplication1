@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 using WebApplication1.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApplication1.Data
 {
@@ -17,9 +18,22 @@ namespace WebApplication1.Data
         {
         }
 
-        public AdvertContext(DbContextOptions<AdvertContext> options)
-            : base(options)
+        public AdvertContext(DbContextOptions<AdvertContext> options) : base(options)
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                var config = new ConfigurationBuilder()
+                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    .AddJsonFile("appsettings.json")
+                    .AddUserSecrets<Program>()
+                    .Build();
+                var connectionString = config["WebApplication1:ConnectionString"];
+                optionsBuilder.UseNpgsql(connectionString);
+            }
         }
     }
 }
