@@ -11,7 +11,7 @@ namespace WebApplication1.Data
 {
     public class AdvertContext : DbContext
     {
-        public DbSet<Advert> Adverts { get; set; }
+        public DbSet<AdvertModel> Adverts { get; set; }
         public DbSet<User> Users { get; set; }
 
         public AdvertContext()

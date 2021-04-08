@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using WebApplication1.Data;
 using WebApplication1.Helpers;
 using WebApplication1.Services;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace WebApplication1
 {
@@ -60,10 +62,11 @@ namespace WebApplication1
                     {basicSecurityScheme, new string[] { }}
                 });
             });
+            services.AddSwaggerGenNewtonsoftSupport();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, ILoggerFactory logFactory)
         {
             if (env.IsDevelopment())
             {
@@ -80,7 +83,7 @@ namespace WebApplication1
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
+            });            
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -89,8 +92,10 @@ namespace WebApplication1
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");      
             });
+
+            ApplicationLogging.LoggerFactory = logFactory;
         }
     }
 }

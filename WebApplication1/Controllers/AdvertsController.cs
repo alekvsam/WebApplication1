@@ -23,8 +23,6 @@ namespace WebApplication1.Controllers
             _context = context;
         }
 
-        // GET: Adverts
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {

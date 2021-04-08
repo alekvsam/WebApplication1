@@ -32,5 +32,15 @@ namespace WebApplication1.Controllers
 
             return Ok(user);
         }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        //TODO Тесты
+        public async Task<IActionResult> Register([FromBody] AuthenticateModel model)
+        {
+            bool result = await _userService.Register(model.Username, model.Password);
+
+            return result ? (IActionResult)Ok() : (IActionResult)BadRequest(new { message = "Unnable to register user" });
+        }
     }
 }
