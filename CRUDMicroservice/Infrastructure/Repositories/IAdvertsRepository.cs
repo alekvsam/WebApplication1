@@ -8,7 +8,7 @@ namespace CRUDMicroservice.Infrastructure.Repositories
     {
         Task<Advert> GetAsync(int id);
 
-        Task<List<Advert>> GetAdvertListAsync();
+        Task<IEnumerable<Advert>> GetAdvertListAsync();
 
         Task<Advert> AddAdvertAsync(Advert advert);
     }

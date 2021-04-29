@@ -11,8 +11,7 @@ namespace CRUDMicroservice.Data
         public AdvertsContext(IOptions<CosmosDbSettings> settings)
         {
             var client = new MongoClient(settings.Value.ConnectionString);
-            if (client != null)
-                _database = client.GetDatabase(settings.Value.Database);
+            _database = client.GetDatabase(settings.Value.Database);
         }
 
         public IMongoCollection<Advert> Adverts

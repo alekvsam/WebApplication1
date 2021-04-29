@@ -19,7 +19,7 @@ namespace CRUDMicroservice.Infrastructure.Repositories
             _context = new AdvertsContext(settings);
         }
 
-        public async Task<List<Advert>> GetAdvertListAsync()
+        public async Task<IEnumerable<Advert>> GetAdvertListAsync()
         {
             return await _context.Adverts.Find(new BsonDocument()).ToListAsync();
         }

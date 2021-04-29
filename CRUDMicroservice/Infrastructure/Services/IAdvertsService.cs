@@ -10,7 +10,7 @@ namespace CRUDMicroservice.Infrastructure.Services
     {
         Task<Advert> GetAdvertAsync(int advertId);
 
-        Task<List<Advert>> GetAllAdvertAsync();
+        Task<IEnumerable<Advert>> GetAllAdvertAsync();
 
         Task<Advert> AddAdvertAsync(Advert advert);
 

@@ -20,10 +20,10 @@ namespace CRUDMicroservice.Controllers
 
         [Route("")]
         [HttpGet]
-        [ProducesResponseType(typeof(List<Advert>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<List<Advert>>> GetAllAdvertAsync()
+        [ProducesResponseType(typeof(IEnumerable<Advert>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<Advert>>> GetAllAdvertAsync()
         {
-            return await _advertsService.GetAllAdvertAsync();
+            return Ok(await  _advertsService.GetAllAdvertAsync());
         }
 
         [Route("")]

@@ -24,7 +24,7 @@ namespace CRUDMicroservice.Infrastructure.Services
             return await _advertsRepository.GetAsync(advertId);
         }
 
-        public async Task<List<Advert>> GetAllAdvertAsync()
+        public async Task<IEnumerable<Advert>> GetAllAdvertAsync()
         {
             return await _advertsRepository.GetAdvertListAsync();
         }
