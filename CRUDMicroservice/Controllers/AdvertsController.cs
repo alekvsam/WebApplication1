@@ -1,4 +1,5 @@
 ﻿using CRUDMicroservice.Infrastructure.Repositories.Commands;
+using CRUDMicroservice.Infrastructure.Repositories.Queries;
 using CRUDMicroservice.Infrastructure.Services;
 using CRUDMicroservice.Model;
 using MediatR;
@@ -17,20 +18,19 @@ namespace CRUDMicroservice.Controllers
     {
         private readonly IAdvertsService _advertsService;
         private readonly IMediator _mediator;
-
-        //ASQ: Как ConfigureServices разруливает ситуацию с разными параметрами в конструкторе?
-        public AdvertsController(IAdvertsService advertsService, IMediator mediator)
-        {
-            _advertsService = advertsService ?? throw new ArgumentNullException(nameof(advertsService));
+      
+        public AdvertsController(IMediator mediator)
+        {         
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         [Route("GetAll")]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Advert>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Advert>>> GetAllAdvertAsync()
+        public async Task<ActionResult<IEnumerable<Advert>>> GetAllAdvertAsync(CancellationToken token)
         {
-            return Ok(await  _advertsService.GetAllAdvertAsync());
+            var adverts = await _mediator.Send(new GetAllAdvertQuery(), token);
+            return Ok(adverts);
         }
 
 
@@ -39,9 +39,14 @@ namespace CRUDMicroservice.Controllers
         [ProducesResponseType(typeof(Advert), StatusCodes.Status200OK)]
         [ProducesDefaultResponseType]
         [ActionName("GetAdvertAsync")]
-        public async Task<ActionResult<Advert>> GetAdvertAsync(int id)
+        public async Task<ActionResult<Advert>> GetAdvertAsync([FromQuery] GetAdvertQuery query, CancellationToken token)
         {
-            return Ok(await _advertsService.GetAdvertAsync(id));
+            var advert = await _mediator.Send(query, token);
+            if (advert == null) 
+            {
+                return NotFound();
+            }
+            return Ok(advert);
         }
 
         /// <summary>
@@ -55,9 +60,9 @@ namespace CRUDMicroservice.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Advert), StatusCodes.Status201Created)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Post([FromBody] AddAdvertCommand client, CancellationToken token)
+        public async Task<IActionResult> Post([FromBody] AddAdvertCommand command, CancellationToken token)
         {
-            Advert entity = await _mediator.Send(client, token);
+            Advert entity = await _mediator.Send(command, token);
             return CreatedAtAction(nameof(AdvertsController.GetAdvertAsync), new { id = entity.AdvertId }, entity);
         }
     }

@@ -26,7 +26,7 @@ namespace CRUDMicroservice.Infrastructure.Repositories
 
         public async Task<Advert> GetAsync(int id)
         {
-            var filter = Builders<Advert>.Filter.Eq("Id", id);
+            var filter = Builders<Advert>.Filter.Eq("AdvertId", id);
             return await _context.Adverts
                                  .Find(filter)
                                  .FirstOrDefaultAsync();

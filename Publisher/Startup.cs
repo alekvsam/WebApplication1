@@ -1,22 +1,18 @@
-using CRUDMicroservice.Infrastructure.Repositories;
-using CRUDMicroservice.Infrastructure.Services;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
+using Publisher.Extensions;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
-namespace CRUDMicroservice
+namespace Publisher
 {
     public class Startup
     {
@@ -28,19 +24,11 @@ namespace CRUDMicroservice
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CRUDMicroservice", Version = "v1" });
-            });
-
-            services.Configure<CosmosDbSettings>(Configuration);
-            //services.AddTransient<IAdvertsService, AdvertsService>();
-            services.AddTransient<IAdvertsRepository, AdvertsRepository>();
+            services.AddRabbit(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,15 +37,13 @@ namespace CRUDMicroservice
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CRUDMicroservice v1"));
             }
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {

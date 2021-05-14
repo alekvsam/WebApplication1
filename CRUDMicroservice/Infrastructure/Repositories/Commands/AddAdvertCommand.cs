@@ -39,7 +39,7 @@ namespace CRUDMicroservice.Infrastructure.Repositories.Commands
 
             public async Task<Advert> Handle(AddAdvertCommand command, CancellationToken cancellationToken)
             {
-                Advert product = new Advert()
+                Advert product = new()
                 {
                     Title = command.Title,
                     Url = command.Url,
